@@ -64,6 +64,16 @@ class EventsController < ApplicationController
   end
 
   private
+
+    def event_owner!
+      
+      authenticate_user!
+      if @event.organizer_id != current_user.id
+        redirect_to events_path
+        flash[:notice] ='you do not have enough permissions to do this'
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_event
       @event = Event.find(params[:id])
